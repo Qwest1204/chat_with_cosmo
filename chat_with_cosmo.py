@@ -1,18 +1,10 @@
 import torch
-import time
-import random
-#import sounddevice as sd
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import colorful as cf
+from translate import Translator
 cf.use_true_colors()
 cf.use_style('monokai')
-language = 'en'
-model_id = 'v3_en'
-sample_rate = 48000
-speaker = 'en_1'
-put_accent = True 
-put_yoo = True 
-device = torch.device('cpu')
+
 
 class CosmoAgent:
     def __init__(self):
@@ -81,41 +73,23 @@ class CosmoAgent:
     def chat(self, situation_narrative, role_instruction):
         print(cf.green("Chat with Cosmo! Input [RESET] to reset the conversation history and [END] to end the conversation."))
         while True:
-            user_input = input("You: ")
+            translator = Translator(from_lang='ru', to_lang='en')
+            translator1 = Translator(from_lang='en', to_lang='ru')
+            input = input("You: ")
+            user_input = translator.translate(input)
             if user_input == "[RESET]":
                 self.reset_history()
                 print(cf.green("[Conversation history cleared. Chat with Cosmo!]"))
                 continue
             if user_input == "[END]":
+                self.reset_history()
                 break
-            response = self.generate(situation_narrative, role_instruction, user_input)
-
-          #  model, _ = torch.hub.load(repo_or_dir='snakers4/silero-models',
-          #                model='silero_tts',
-          #                language=language,
-          #                speaker=model_id)
-          #  model.to(device)
-
-           # audio = model.apply_tts(text=response,
-            #                        speaker=speaker,
-             #                       sample_rate=sample_rate,
-              #                      put_accent=put_accent,
-               #                     put_yo=put_yoo)
-
-            def neo_print(value, base_delay=0.03):
-                for char in value:
-                    print(char, end='', flush=True)
-                    time.sleep(base_delay + random.randint(1, 100) * base_delay / 100)
-                print()
-            if __name__ == '__main__':
-                neo_print(cf.blue("Cosmo: " + response))
-               # sd.play(audio, sample_rate)
-                #time.sleep(len(audio) / sample_rate + 1.1)
-                #sd.stop()
-            
-
+            text1 = self.generate(situation_narrative, role_instruction, user_input)
+            response = translator1.translate(text1)
+            print(cf.blue("Cosmo: " + response))
 
 def main():
+    print(cf.bold | cf.blue("Welcome to SODAverse!"))
     cosmo = CosmoAgent()
     cosmo.run()
 
