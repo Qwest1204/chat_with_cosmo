@@ -1,0 +1,3 @@
+TOKEN = '6159322821:AAHSRHucxja62pfDzN1zZolyig7GZArCtVg'
+LANGUAGE = 'ru'
+
