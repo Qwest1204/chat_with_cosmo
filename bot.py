@@ -7,6 +7,7 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import colorful as cf
 from translate import Translator
 import config
+
 cf.use_true_colors()
 cf.use_style('monokai')
 
@@ -40,8 +41,7 @@ class CosmoAgent:
         """
         Сохраняем сообщение в переменную
         """
-        messages.append(message.text)
-        await message.answer("Сообщение сохранено!")
+
 
     # Обработчик команды /show_messages
     @dp.message_handler(commands=['show_messages'])
@@ -63,7 +63,8 @@ class CosmoAgent:
                 text1 = self.generate(situation_narrative, role_instruction, user_input)
                 response = translator1.translate(text1)
                 print(cf.blue("Valera: " + response))
-        await message.reply("Valera: " + response)
+
+        await message.reply("Valera: " + chat.response)
 
 
     def main():
